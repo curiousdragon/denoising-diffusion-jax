@@ -1,0 +1,272 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{parskip}
+\usepackage{amssymb, amsmath, graphicx, subfigure}
+\usepackage[dvipsnames]{xcolor}
+
+\DeclareMathOperator{\EX}{\mathbb{E}}% expected value
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+	\hspace*{\fill} $\Box$ }
+\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+	\hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+	\hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{CS182/282A: Deep Neural Nets}{#2}{Anant Sahai}{#3}{Diffusion, Denoising, and Deep Networks}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLEASE MODIFY THESE FIELDS AS APPROPRIATE
+\newcommand{\problemsetnum}{1}          % problem set number
+\newcommand{\duedate}{December 7, 2022}  % problem set deadline
+\newcommand{\studentname}{Jamie Hong, Michael Lam, Mark Lindblad, Anze Liu}    % 
+
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\problemset{\problemsetnum}{\duedate}{\studentname}
+
+
+\setcounter{section}{-1}
+\section{Introduction}
+Denoising Diffusion Probabilistic Models. 
+
+In this assignment, we'll investigate how diffusion models work, involving:
+\begin{enumerate}
+    \item the forward process where we add randomly sampled Gaussian noise to an input via a Markov Chain of diffusion steps,
+    \item analyzing different loss functions,
+    \item and followed by exploring how to reverse the diffusion process by denoising and generate new samples from the original predicted distribution.
+\end{enumerate}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=12cm]{forward_backward.png}
+    \caption{Forward Diffusion Process and Reverse Denoising Process}
+    \label{fig:ForwardBackward}
+\end{figure}
+
+\section{Forward ``Noising'' Process}
+Diffusion networks are neural networks that progressively ``denoise'' an input, e.g. image, that has been corrupted with Gaussian noise until the original input is reconstructed. This can be thought of as a two-pass Markov chain with $T$ nodes. In the forward (first) pass, noise is added from state to state, which can be described by the following posterior: 
+\begin{equation}
+    q(\textbf{x}_{1:T}|\textbf{x}_{0}) := \prod_{t=1}^{T} q(\textbf{x}_{t}|\textbf{x}_{t - 1}),\;\;\;\;\;q(\textbf{x}_{t}|\textbf{x}_{t - 1}) := N(\textbf{x}_{t}; \sqrt{1 - \beta_{t}}\textbf{x}_{t-1}, \beta_{t} \textbf{I})
+\end{equation}
+where $\textbf{x}_{0}$ is the initial image, and each subsequent step $\textbf{x}_{t}$ is a ``noised'' version of the image at the previous time step. $\beta_{1}$...$\beta_{T}$ is the \textit{variance schedule} because it controls how much each image at each time step is diffused; qualitatively, the higher the sampling variance $\beta_{t}$, the more unrecognizable an image will be after the diffusion at that time step. 
+
+
+
+
+\noindent In this problem, we will be exploring how to implement this forward diffusion pass through the Markov chain. The rest of the problems will be dedicated to the \textit{reverse} pass, where the image will be progressively \textit{denoised} until the resulting image will be close to the initial image $\textbf{x}_{0}$.
+
+\begin{enumerate}
+\item
+\textbf{What happens when all the variances are 0? What do the images look like at each time step? What about when all the variances are 1?}
+
+% Answer:
+
+
+\item
+In the \verb|diffusion.ipynb| Jupyter notebook, implement the \verb|compute_mean| and \verb|compute_cov| functions. Run the following cells to test your implementation. Then follow the instructions in the notebook to define your own input and variance schedules to visualize.
+
+% Answer:
+
+
+\item
+Once you have implemented the functions above, the code allows you to run the forward diffusion pass with a number of different variance schedules. Play around with these parameters and try testing different kinds of variance schedules. \textbf{How does the variance scheduling affect the rate at which the initial image becomes unrecognizable? What patterns do you notice?}
+
+
+
+\item
+In practice, we often want to calculate the Gaussian noise at a time step $t$ conditioned on the initial time step rather than the previous time step. \textbf{Given equation (1), derive a closed-form expression for $q(\textbf{x}_{T}|\textbf{x}_{0})$} and \textbf{show your work}. 
+
+(Hint: Define variables $\alpha_t := 1 - \beta_t$ and $\bar\alpha_t := \prod_{s = 1}^{t}\alpha_s$.)
+
+
+\end{enumerate}
+\section{Optimization Loss Function}
+We will now study the reverse ``denoising'' pass of the diffusion network. The joint distribution $p_{\theta}(\textbf{x}_{0:T})$ is the reverse process, represented by a Markov chain with learned Gaussian transitions $p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_t)$ for $t = 1, ..., T$:
+\begin{equation}
+    p_{\theta}(\textbf{x}_{0:T}) := p(\textbf{x}_{T})\prod_{t=1}^{T} p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_{t}),\;\;\;\;\;p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_{t}) := N(\textbf{x}_{t-1}; {\mu}_{\theta}(\textbf{x}_t, t), {\Sigma}_{\theta}(\textbf{x}_t, t))
+\end{equation}
+To optimize the reverse pass, we need to define an appropriate loss function for the final ``denoised'' state. In other words, given an end state $\textbf{x}_{t}$, we would like to estimate the most likely initial state, i.e. the state $\textbf{x}_0$ with the highest probability $p_{\theta}(\textbf{x}_0)$. This is equivalent to finding the minimum of the negative log likelihood:
+\begin{equation}
+    \EX[-log \; p_{\theta}(\textbf{x}_0)]
+\end{equation}
+We would like to find a distribution that approximates the random variable so we can generate data via sampling to predict probabilities at different time steps. \textit{Variational bound} (also known as the \textit{evidence lower bound}) allows us to upper bound the above negative log likelihood as such:
+\begin{equation}
+    \EX\left[-log \; p(\textbf{x}_0)\right] \; \leq \; \EX_q\left[-log \; \frac{p_{\theta}(\textbf{x}_{0:T})}{q(\textbf{x}_{1:T}|\textbf{x}_0)}\right] =: L
+\end{equation}
+We define the variational bound as our loss function. 
+
+\begin{enumerate}
+\item
+\textbf{Show that the following expression is equivalent to the variational bound on the negative log likelihood:}
+\begin{equation}
+    \EX_q\left[-log \; p_{\theta}(\textbf{x}_T) - \sum_{t=1}^{T} log\;\frac{p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_t)}{q(\textbf{x}_t|\textbf{x}_{t-1})} \right]
+\end{equation}
+\item
+For performance reasons, we would like to rewrite the upper bound derived in (2.1) as the \textit{KL divergence} between the posterior distribution of Gaussian noise and the probability of a given state. The KL divergence between P and Q measures the ``surprise'' from sampling from distribution Q when the actual population distribution is P. Mathematically, it is defined as the following:
+\begin{equation}
+    D_{KL}(P||Q) \; := \;\sum_{x\in\chi}P(x)\;log\;\frac{P(x)}{Q(x)}
+\end{equation}
+
+\begin{enumerate}
+\item
+\textbf{First prove the following equation.}
+(Hint: Define $q(\textbf{x}_{t-1}|\textbf{x}_t, \textbf{x}_0)$ using conditional probability.)
+\begin{equation}
+    q(\textbf{x}_t|\textbf{x}_{t-1}) = \frac{q(\textbf{x}_{t-1}|\textbf{x}_t, \textbf{x}_0) q(\textbf{x}_t|\textbf{x}_0)}{q(\textbf{x}_{t-1}|\textbf{x}_0)}
+\end{equation}
+% Answer:
+
+
+\item
+\textbf{Using the above equation, show that (5) is equivalent to the following expression:}
+(Hint: use the properties of logarithms.)
+\begin{equation}
+    \EX_q[D_{KL}(q(\textbf{x}_T|\textbf{x}_0) \; || \; p(\textbf{x}_T)) + \sum_{t>1}D_{KL}(q(\textbf{x}_{t-1}|\textbf{x}_t, \textbf{x}_0)\;||\;p_{\theta}(\textbf{x}_{t-1} | \textbf{x}_t)) - log \;p_{\theta}(\textbf{x}_0 | \textbf{x}_1)]
+\end{equation}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\section{Reverse ``Denoising'' Process}
+Notice that the loss function, when written in the KL divergence form, involves a Gaussian posterior probability conditioned on $\textbf{x}_t$ and $\textbf{x}_0$. It can be shown that this distribution is actually tractable and has the following closed form:
+\begin{equation}
+    q(\textbf{x}_{t-1}|\textbf{x}_t, \textbf{x}_0) = N(\textbf{x}_{t-1}; {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0), \Tilde{\beta_t}\boldsymbol{I})
+\end{equation}
+where
+\begin{equation}
+    \Tilde{\mu}_t(\textbf{x}_t, \textbf{x}_0) := \frac{\sqrt{\Bar{\alpha}_{t-1}}\beta_t}{1 - \Bar{\alpha}_{t}}\textbf{x}_0 \; + \; \frac{\sqrt{\alpha_t}(1 - \Bar{\alpha}_{t-1})}{1 - \Bar{\alpha}_{t}}\textbf{x}_t \;\;\;\;\;\;\;\;\;\; \Tilde{\beta}_t := \frac{1 - \Bar{\alpha}_{t-1}}{1 - \Bar{\alpha}_{t}}\beta_t
+\end{equation}
+and both $\alpha_t$ and $\Bar{\alpha}_{t}$ are defined the same as in problem (1.4).
+
+To establish the diffusion model, we need to choose the variances $\beta_t$ for the forward process. To establish the denoising process, we need to choose a parameterization of the Gaussian distribution for the reverse process. We can then define a loss function using the parameterized distribution to construct a model. 
+
+To simplify implementation and improve computation efficiency, instead of directly computing the KL divergence loss on the target distribution $q$ and predicted distribution $p_\theta$, we choose to use the Mean Squared Error of $\Tilde{\mu}_t(x_t, x_0)$ (mean of target distribution) and $\mu_\theta(x_t, t)$ (mean of predicted distribution) as the training loss to obtain $p_\theta$, which approximates $q$. 
+
+Revisiting $p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_{t}) :=  N(\textbf{x}_{t-1};\;{\mu}_{\theta}(\textbf{x}_t, t),\;{\Sigma}(\textbf{x}_t, t))$ from (2), assume the variance is known from the variance scheduler and define ${\Sigma_\theta}(\textbf{x}_t, t) := {\sigma}_{t}^2\boldsymbol{I}$. 
+
+The objective is to find a reverse process distribution $p_{\theta}(\textbf{x}_{t-1}|\textbf{x}_{t}) := N(\textbf{x}_{t-1}; {\mu}_{\theta}(\textbf{x}_t, t),  {\sigma}_{t}^2\boldsymbol{I})$ such that ${\mu}_{\theta}$ predicts the posterior mean $\Tilde{\mu_t}$ of the forward process $q(\textbf{x}_{t-1}|\textbf{x}_t, \textbf{x}_0) = N(\textbf{x}_{t-1};\;\Tilde{\mu_t}(\textbf{x}_t, \textbf{x}_0),\; \Tilde{\beta_t}\boldsymbol{I})$. 
+
+Define the loss at time $t-1$ as:
+\begin{equation}
+    L_{t-1} := \EX_q\left[\frac{1}{2{\sigma_t}^2}
+    \Big\lVert {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t, t)\Big\rVert^2\right] + C
+\end{equation}
+where C is a constant independent on $\theta$. 
+
+\begin{enumerate}
+    \item 
+    Using the following reparameterization of your answer to (1.3), 
+    
+    ${x_t}(x_0, \epsilon) = \sqrt{\bar\alpha_t}x_0 + \sqrt{1 - \bar\alpha_t}\epsilon $  for $\epsilon \sim N(\boldsymbol{0}, \boldsymbol{I})$, 
+    
+    \textbf{Rewrite the loss (11) in terms of ${x_t}(x_0, \epsilon)$ (do not use $\Tilde\mu_t$).}
+
+    \item 
+    Instead of training the reverse process to predict the mean, we can train it to predict the noise $\epsilon$. Specifically, using the following parameterization of $\mu_\theta$ in terms of $\epsilon_\theta$ :
+    \begin{equation}
+        {\mu_\theta}(\textbf{x}_t, t) = {{\Tilde\mu}_t}(\textbf{x}_t, \frac{1}{\sqrt{{\bar\alpha}_t}}(\textbf{x}_t - \sqrt{1 - {\bar\alpha}_t}{\epsilon_\theta}_(\textbf{x}_t))) = \frac{1}{\sqrt{\alpha_t}}(\textbf{x}_t - \frac{\beta_t}{\sqrt{1 - {\bar\alpha}_t}}{\epsilon_\theta}(\textbf{x}_t, t))
+    \end{equation}
+    \textbf{rewrite your answer to problem (3.1) in terms of  $\epsilon$, $\epsilon_\theta$, and $\textbf{x}_0$ only (no $\mu_\theta$ or $\textbf{x}_t$).}
+
+\end{enumerate}
+
+
+
+\section{Predicting Mean vs. Predicting Noise}
+
+As shown in the prior questions, there are often multiple choices of loss functions and different parameterizations to choose from, whether to use for training or to gauge how effective one model might be over another.
+
+Here, we'll look at two specific choices: one involving the mean of the distribution over the timesteps of the diffusion process, and the other involving the noise that was added to the input as a result of diffusion.
+
+We'll consider just the loss functions themselves for this question, as the process of training denoising models will be covered in the last question of this homework.
+
+\begin{enumerate}
+    \item
+        \textbf{Implement both loss functions} in the \verb|loss_func_comp.ipynb| Jupyter notebook, and compare their computation times.
+    \item
+        \textbf{Comment on the relative speeds of these loss functions. How might this impact which function you'd want to use in practice?}
+\end{enumerate}
+
+\section{Code: Train and Observe}
+\begin{enumerate}
+    \item
+        \textbf{Complete all parts of 
+        denoising.ipynb.}
+    \item 
+        Compare the states from the forward process and backward process. \textbf{What do you observe? Note down your observations in the written part of this homework.}
+\end{enumerate}
+
+\section{Homework Process and Study Group}
+\begin{enumerate}
+    \item
+        \textbf{What sources did you use to work through this homework?}
+    \item
+        \textbf{Did you work with anyone on this homework? If so, please list their names and Cal 1 ID's here.}
+    \item
+        \textbf{About how many hours did this homework take you?}
+\end{enumerate}
+
+\section*{References}
+\beginrefs
+\bibentry{1}{\sc Jonathan Ho}, {\sc Ajay Jain}, {\sc Pieter Abbeel},
+Denoising Diffusion Probabilistic Models, 
+{\it Advances in Neural Information Processing Systems 33 (NeurIPS)\/} (2020).
+\bibentry{2}{\sc The JAX Authors}, {\sc Google}, 
+JAX reference documentation, \\
+{\it https://jax.readthedocs.io/en/latest/index.html\/} (2020).
+
+
+\endrefs
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
