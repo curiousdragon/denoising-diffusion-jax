@@ -7,14 +7,16 @@ config.update("jax_array", True)
 import matplotlib.pyplot as plt
 
 
-def show_plots(states: Array, standard=False):
+def show_plots(states: Array, standard=False, description=None):
     n = len(states)
-    _, axs = plt.subplots(nrows=1, ncols=n, figsize=(9, 2))
+    fig, axs = plt.subplots(nrows=1, ncols=n, figsize=(9, 2))
     for i in range(n):
         if standard:
             axs[i].imshow(states[i], vmin=-1, vmax=2)
         else:
             axs[i].imshow(states[i])
+    if description:
+        plt.suptitle(description)
     plt.show()
 
 
