@@ -309,7 +309,7 @@ The objective is to find a reverse process distribution $p_{\theta}(\textbf{x}_{
 Define the loss at time $t-1$ as:
 \begin{equation}
     L_{t-1} := \EX_q\left[\frac{1}{2{\sigma_t}^2}
-    \Big\lvert {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t, t)\Big\rvert^2\right] + C
+    \Big\lVert {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t, t)\Big\rVert^2\right] + C
 \end{equation}
 where C is a constant independent on $\theta$. 
 
@@ -332,7 +332,7 @@ where C is a constant independent on $\theta$.
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
     \Big\lVert{\Tilde\mu_t}(\textbf{x}_t(\textbf{x}_0, \epsilon), \frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon)) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\lVert^2\right] \\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
-    \Big\lvert \frac{\sqrt{\Bar{\alpha}_{t-1}}\beta_t}{1 - \Bar{\alpha}_t}\frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon) + \frac{\sqrt{\alpha_t}(1 - \Bar{\alpha}_{t-1})}{1 - \Bar{\alpha}_t}\textbf{x}_t(x_0, \epsilon) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right]\\
+    \Big\lVert \frac{\sqrt{\Bar{\alpha}_{t-1}}\beta_t}{1 - \Bar{\alpha}_t}\frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon) + \frac{\sqrt{\alpha_t}(1 - \Bar{\alpha}_{t-1})}{1 - \Bar{\alpha}_t}\textbf{x}_t(x_0, \epsilon) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right]\\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
     \Big\lVert \left[\frac{\beta_t}{(1 - \Bar{\alpha}_t)\sqrt{\alpha_t}} + \frac{\alpha_t(1 - \Bar{\alpha}_{t - 1})}{\sqrt{\alpha_t}(1 - \Bar{\alpha}_t)}\right]\textbf{x}_t(\textbf{x}_0, \epsilon) - \frac{\beta_t}{\sqrt{1 - \Bar{\alpha}_t}\sqrt{\alpha_t}}\epsilon - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right]\\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}

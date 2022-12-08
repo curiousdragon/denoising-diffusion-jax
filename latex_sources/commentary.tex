@@ -141,7 +141,7 @@ Alternatively, the other option is to train the model based on the MSE between t
 The purpose of this problem is to help students understand the equivalence between these two losses via parameterization and think about scenarios where we may want to use one over the other. We begin by presenting the squared mean loss as given in the paper: 
 \begin{equation}
     L_{t-1} := \EX_q\left[\frac{1}{2{\sigma_t}^2}
-    \Big\lvert {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t, t)\Big\rvert^2\right] + C
+    \Big\lVert {\Tilde\mu_t}(\textbf{x}_t, \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t, t)\Big\rVert^2\right] + C
 \end{equation}
 where $\Tilde{\mu}_t$ represents the mean of the distribution at time $t$ that we are trying to predict,
 and $\mu_{\theta}$ represents the predicted mean from the model that has parameters expressed as $\theta$.
