@@ -8,9 +8,9 @@ The motivating paper for our problem set is "Denoising Diffusion Probabilistic
 Models," which investigates diffusion probabilistic models and denoising with
 the goal of generating new high quality image samples.
 
-In these series of Jupyter notebooks, we explore some of the key concepts from
-the paper and diffusion models in general.
-We hope they can be illustrative!
+In these series of written homework problems and Jupyter notebooks,
+we explore some of the key concepts from the paper and diffusion models
+in general. We hope the written and coding problems can be illustrative!
 
 ## Setup
 
