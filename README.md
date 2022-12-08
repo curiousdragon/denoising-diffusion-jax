@@ -1,6 +1,6 @@
 # Diffusion, Denoising, and Deep Networks
 
-A Fall 2022 CS 182 Final Project.
+A Fall 2022 CS 182/282A Final Project.
 
 ## Introduction
 
