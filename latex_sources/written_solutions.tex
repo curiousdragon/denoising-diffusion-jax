@@ -330,7 +330,7 @@ where C is a constant independent on $\theta$.
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
     \Big\lVert{\Tilde\mu_t}(\textbf{x}_t(\textbf{x}_0, \epsilon), \textbf{x}_0) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right] \\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
-    \Big\lVert{\Tilde\mu_t}(\textbf{x}_t(\textbf{x}_0, \epsilon), \frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon)) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\lVert^2\right] \\
+    \Big\lVert{\Tilde\mu_t}(\textbf{x}_t(\textbf{x}_0, \epsilon), \frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon)) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right] \\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
     \Big\lVert \frac{\sqrt{\Bar{\alpha}_{t-1}}\beta_t}{1 - \Bar{\alpha}_t}\frac{1}{\sqrt{\Bar{\alpha}_t}}(\textbf{x}_t(\textbf{x}_0, \epsilon) - \sqrt{1 - \Bar{\alpha}_t}\epsilon) + \frac{\sqrt{\alpha_t}(1 - \Bar{\alpha}_{t-1})}{1 - \Bar{\alpha}_t}\textbf{x}_t(x_0, \epsilon) - {\mu_\theta}(\textbf{x}_t(\textbf{x}_0, \epsilon), t)\Big\rVert^2\right]\\
     &= \EX_{\textbf{x}_0, \epsilon}\left[\frac{1}{2{\sigma_t}^2}
@@ -348,7 +348,7 @@ where C is a constant independent on $\theta$.
     \item 
     Instead of training the reverse process to predict the mean, we can train it to predict the noise $\epsilon$. Specifically, using the following parameterization of $\mu_\theta$ in terms of $\epsilon_\theta$ :
     \begin{equation}
-        {\mu_\theta}(\textbf{x}_t, t) = {{\Tilde\mu}_t}(\textbf{x}_t, \frac{1}{\sqrt{{\bar\alpha}_t}}(\textbf{x}_t - \sqrt{1 - {\bar\alpha}_t}{\epsilon_\theta}_(\textbf{x}_t))) = \frac{1}{\sqrt{\alpha_t}}(\textbf{x}_t - \frac{\beta_t}{\sqrt{1 - {\bar\alpha}_t}}{\epsilon_\theta}\left(\textbf{x}_t, t)\right)
+        {\mu_\theta}(\textbf{x}_t, t) = {{\Tilde\mu}_t}(\textbf{x}_t, \frac{1}{\sqrt{{\bar\alpha}_t}}(\textbf{x}_t - \sqrt{1 - {\bar\alpha}_t}{\epsilon_\theta}_(\textbf{x}_t))) = \frac{1}{\sqrt{\alpha_t}}(\textbf{x}_t - \frac{\beta_t}{\sqrt{1 - {\bar\alpha}_t}}{\epsilon_\theta}(\textbf{x}_t, t))
     \end{equation}
     \textbf{rewrite your answer to problem (3.1) in terms of  $\epsilon$, $\epsilon_\theta$, and $\textbf{x}_0$ only (no $\mu_\theta$ or $\textbf{x}_t$).}
 

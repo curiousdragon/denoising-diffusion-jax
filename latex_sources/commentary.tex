@@ -158,15 +158,15 @@ From this point, the second part of the question takes the student through a der
 
 \section{Predicting Mean vs. Predicting Noise}
 
-Though the previous problem had the student walk through the steps of deriving the noise loss function from the mean loss, there's still the question of how these losses are implemented in practice or bring up considerations of why we might choose one over another for training models since the parameterizations are equivalent. In this question, we explore one comparison between the two different loss functions: the raw speed performance.
+Though the previous problem had the student walk through the steps of deriving the noise loss function from the mean loss, there's still the question of how these losses are implemented in practice or why we might choose one over another for training models since the parameterizations are equivalent. In this question, we explore one comparison between the two different loss functions: their computational efficiency and performance.
 
 As pointed out in the paper, there are multiple options of loss functions and parameterizations available for this problem.
 Some, like the mean based loss function, focus on characterizing the distribution of the states through predicting the mean.
 Others, like the noise based loss function, focus on the diffused \textit{noise} that gets added as part of the forward diffusion process.
 
-Thus, for this question, students will turn to the \verb|loss_func_comp| Jupyter notebook. The notebook guides the students through comparing the speed performance of the mean based loss and the noise based loss functions. In order to do so, the students must first implement both the mean and noise loss functions given the input parameters. We have provided autograded test cases with random inputs and expected outputs of dimension five to ensure the student's implementation is correct or how far they are on average from being on the right track towards the correct implementation.
+Thus, for this question, students will turn to the \verb|loss_func_comp| Jupyter notebook. The notebook guides the students through comparing the speed of the mean based loss and the noise based loss functions. In order to do so, the students must first implement both the mean and noise loss functions given the input parameters. We have provided autograded test cases with random inputs and expected outputs of dimension five to ensure the student's implementation is correct.
 
-We then ask the student to run a speed comparison test on these two loss functions on a variety of random inputs with different vector dimensions ranging from 2 to 1000 with increments of 200. The student will find that, while the two loss functions are equivalent according to what was derived in problem 3, the mean loss function generally seems to be more expensive in the cases we are considering.
+We then ask the student to run a speed comparison test on these two loss functions on a variety of random inputs with different vector dimensions ranging from 2 to 1000 with increments of 200. The student will find that, while the two loss functions are equivalent according to what was derived in problem 3, the mean loss function generally seems to be more expensive in the cases we are considering, compared to the noise loss function.
 
 We mention in our solutions that the noise loss function also has the extra advantage of lending itself easily to further approximations or simplifications that can further speed up the training, but this is outside the scope of this homework, and we do not expect the student to fully understand this as this was just a footnote in the paper.
 
