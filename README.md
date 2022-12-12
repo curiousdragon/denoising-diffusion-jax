@@ -30,3 +30,15 @@ Please change the following cell from `%matplotlib widget` to `%matplotlib inlin
 since Colab does not currently seem to support `ipympl` or `widget` out of the box.
 (It may be able to support the `widget` mode but more setup for that may be required.)
 
+## References
+
+Here are the main references that we found helpful in creating our problem set.
+The links are to their respective GitHub repositories.
+
+\[[1](https://github.com/hojonathanho/diffusion)\]
+Jonathan Ho, Ajay Jain, Pieter Abbeel; *Denoising Diffusion Probabilistic Models*;
+Advances in Neural Information Processing Systems 33 (NeurIPS) (2020).
+
+\[[2](https://github.com/google/jax)\]
+The JAX authors, Google; JAX reference documentation;
+https://jax.readthedocs.io/en/latest/index.html (2020).
